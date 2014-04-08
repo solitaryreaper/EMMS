@@ -1,5 +1,8 @@
 @(trainSummary: com.walmartlabs.productgenome.rulegenerator.model.analysis.DatasetEvaluationSummary, 
   testSummary: com.walmartlabs.productgenome.rulegenerator.model.analysis.DatasetEvaluationSummary)
+  
+@import com.walmartlabs.productgenome.rulegenerator.utils.FormatUtils;
+  
 <html>
     <head>
         <title>Matching Results</title>
@@ -62,21 +65,21 @@
                                 <td>@testSummary.getTruePositives()</td>
                             </tr>
                             <tr>
-                                <td>True Negatives</td>
-                                <td>@testSummary.getTrueNegatives()</td>
+                                <td>Predicted Positives</td>
+                                <td>@testSummary.getPredictedPositives()</td>
                             </tr>
                             <tr>
-                                <td>False Positives </td>
-                                <td>@testSummary.getFalsePositives()</td>
+                                <td>Correct Predictions </td>
+                                <td>@testSummary.getCorrectPredictions()</td>
                             </tr>
                             <tr>
-                                <td>False Negatives</td>
-                                <td>@testSummary.getFalseNegatives()</td>
+                                <td>Precision </td>
+                                <td>@(FormatUtils.formatDoubleToString(testSummary.getPrecision())) (%)</td>
+                            </tr>
+                            <tr>
+                                <td>Recall</td>
+                                <td>@(FormatUtils.formatDoubleToString(testSummary.getRecall())) (%)</td>
                             </tr>                            
-                            <tr>
-                                <td>Rules Applied</td>
-                                <td>@testSummary.getTotalRules()</td>
-                            </tr>    
                         </tbody>                    
                     </table>                
                 </div>
@@ -94,8 +97,8 @@
                             @for(ruleSummary <- testSummary.getRankedAndFilteredRules()) {
                                 <tr>
                                     <td>@ruleSummary.getRule().toString()</td>
-                                    <td>@ruleSummary.getPrecision()</td>
-                                    <td>@ruleSummary.getCoverage()</td>
+                                    <td>@(FormatUtils.formatDoubleToString(ruleSummary.getPrecision()))</td>
+                                    <td>@(FormatUtils.formatDoubleToString(ruleSummary.getCoverage()))</td>
                                 </tr>
                             
                             }                        
