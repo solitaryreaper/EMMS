@@ -46,6 +46,6 @@ public class JobController extends Controller {
     	EMMSWorkflowDriver jobDriver = new EMMSWorkflowDriver();
     	JobEvaluationSummary matchRunResults = jobDriver.runEntityMatching(jobMeta);
     	
-    	return ok(results.render(matchRunResults.getTestPhaseSummary(), matchRunResults.getTestPhaseSummary()));
+    	return ok(results.render(matchRunResults.getTrainPhaseSumary(), matchRunResults.getTestPhaseSummary()));
     }
 }
