@@ -1,8 +1,13 @@
 package controllers;
 
+import java.util.List;
+
 import com.walmartlabs.productgenome.rulegenerator.EMMSWorkflowDriver;
 import com.walmartlabs.productgenome.rulegenerator.config.JobMetadata;
+import com.walmartlabs.productgenome.rulegenerator.model.analysis.DatasetEvaluationSummary;
 import com.walmartlabs.productgenome.rulegenerator.model.analysis.JobEvaluationSummary;
+import com.walmartlabs.productgenome.rulegenerator.model.analysis.RuleEvaluationSummary;
+import com.walmartlabs.productgenome.rulegenerator.model.rule.Rule;
 
 import play.Logger;
 import play.data.DynamicForm;
@@ -38,14 +43,21 @@ public class JobController extends Controller {
     	jobMeta.setSourceFile(srcFilePath.getFile().getAbsolutePath());
     	jobMeta.setTargetFile(tgtFilePath.getFile().getAbsolutePath());
     	jobMeta.setGoldFile(goldFilePath.getFile().getAbsolutePath());
+
+    	jobMeta.setDesiredPrecision(form.get("precision"));
+    	jobMeta.setDesiredCoverage(form.get("coverage"));
     	
-    	Logger.info(jobMeta.getSourceFile());
-    	Logger.info(jobMeta.getTargetFile());
-    	Logger.info(jobMeta.getGoldFile());
+    	int numRulesReqd = Integer.parseInt(form.get("num_rules"));
+    	jobMeta.setDesiredNumRules(numRulesReqd);
     	
     	EMMSWorkflowDriver jobDriver = new EMMSWorkflowDriver();
     	JobEvaluationSummary matchRunResults = jobDriver.runEntityMatching(jobMeta);
+    	DatasetEvaluationSummary trainPhaseSummary = matchRunResults.getTrainPhaseSumary();
+    	DatasetEvaluationSummary testPhaseSummary = matchRunResults.getTestPhaseSummary();
     	
-    	return ok(results.render(matchRunResults.getTrainPhaseSumary(), matchRunResults.getTestPhaseSummary()));
+    	List<RuleEvaluationSummary> topNRules = testPhaseSummary.getRankedAndFilteredRules();
+    	topNRules = topNRules.size() > numRulesReqd ? topNRules.subList(0, numRulesReqd) : topNRules; 
+    	
+    	return ok(results.render(trainPhaseSummary, testPhaseSummary, topNRules));
     }
 }
