@@ -47,17 +47,14 @@ public class JobController extends Controller {
     	jobMeta.setDesiredPrecision(form.get("precision"));
     	jobMeta.setDesiredCoverage(form.get("coverage"));
     	
-    	int numRulesReqd = Integer.parseInt(form.get("num_rules"));
-    	jobMeta.setDesiredNumRules(numRulesReqd);
-    	
     	EMMSWorkflowDriver jobDriver = new EMMSWorkflowDriver();
     	JobEvaluationSummary matchRunResults = jobDriver.runEntityMatching(jobMeta);
     	DatasetEvaluationSummary trainPhaseSummary = matchRunResults.getTrainPhaseSumary();
+    	DatasetEvaluationSummary tunePhaseSummary = matchRunResults.getTunePhaseSummary();
     	DatasetEvaluationSummary testPhaseSummary = matchRunResults.getTestPhaseSummary();
     	
-    	List<RuleEvaluationSummary> topNRules = testPhaseSummary.getRankedAndFilteredRules();
-    	topNRules = topNRules.size() > numRulesReqd ? topNRules.subList(0, numRulesReqd) : topNRules; 
+    	List<RuleEvaluationSummary> topNRules = testPhaseSummary.getRankedRuleSummaries(testPhaseSummary.getRuleSummary());
     	
-    	return ok(results.render(trainPhaseSummary, testPhaseSummary, topNRules));
+    	return ok(results.render(trainPhaseSummary, tunePhaseSummary, testPhaseSummary, topNRules));
     }
 }
