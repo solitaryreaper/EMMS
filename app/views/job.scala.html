@@ -2,16 +2,37 @@
     <head>
         <title>Matching Job</title>
         <link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.2/css/bootstrap.min.css" rel="stylesheet">
+		<link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/main.css")">
+		<link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+		        
         <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js" type="text/javascript"></script>
         <script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>        
     </head>
     <body>
         <header class="well">
-            <h1 align="center"><b>Entity Matching Management System</b></h1>
+            <h1 align="center">
+            	<i class="fa fa-random"></i>&nbsp;<b><a href="@routes.JobController.index()">Entity Matching Management System</a></b>
+            </h1>
         </header>
         
+		<div id="results_loading" style='display: none;'>
+			<img src="http://barracuda.botany.wisc.edu/MaizeWebApp/assets/img/loading.gif">
+		</div>
+	        
+		<div class="navbar container">  
+		    <div class="navbar-inner">  
+		        <div class="container">
+		            <ul class="nav">
+		                 <li class="active"><a href="#"><i class="fa fa-home fa-2x"></i></a></li>
+		                 <li><a href="#"><b>FAQ</b></a></li>
+		            </ul>
+		        </div>  
+		    </div>  
+		</div>     	        
+			        
         <div class="container">
-	        <form class="form-horizontal" id="job_form" method="post" action="@routes.JobController.submitJob()" role="form" enctype="multipart/form-data">
+	        <form id="form_container" class="form-horizontal" id="job_form" method="post" action="@routes.JobController.submitJob()" role="form" 
+	        enctype="multipart/form-data" onsubmit="return show_progress_box()">
 	        
 	           <legend>Project Metadata</legend>
 	           <fieldset>
@@ -91,7 +112,7 @@
                            <input type="text" id="precision" name="precision" value="98">
                        </div>
                    </div>
-                   <div class="control-group span4 offset1">
+                   <div class="control-group span4">
                        <label class="control-label" for="coverage"><b>Coverage(%)</b></label>
                        <div class="controls">
                            <input type="text" id="coverage" name="coverage" value="20">
@@ -123,9 +144,27 @@
                </fieldset>
                
                <div class="form-actions">  
-                   <button id="project_submit" type="submit" class="btn btn-primary">Start Entity Matching</button>  
+                   <button id="project_submit" type="submit" class="btn btn-primary">Generate Matching Rules</button>  
                </div>                 
 	        </form>
         </div>
+        
+        
+        <script>
+		$(document).ready(function() {
+			// To ensure that the loading gif is hidden when the page is initially loaded
+			$('#results_loading').hide();
+		});
+		
+		function show_progress_box()
+		{
+			// make the background translucent and show a loading gif to make
+			// the web application interactive and let the user know that some
+			// processing is going on in the background.
+			$("#form_container").css({ opacity: 0.25 });
+			$('#results_loading').show();			
+		}
+		   
+        </script>
     </body>
 </html>

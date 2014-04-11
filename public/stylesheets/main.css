@@ -1,0 +1,30 @@
+#results_loading {
+    position:fixed;
+    top: 50%;
+    left: 50%;
+    width:30em;
+    height:18em;
+    margin-top: -9em; /*set to a negative number 1/2 of your height*/
+    margin-left: -15em; /*set to a negative number 1/2 of your width*/    
+ }
+ 
+/* Table header should have a distinguishing color*/ 
+table thead tr th {
+	background-color: #e6EEEE;
+	border: 1px solid #FFF;
+	padding: 4px;
+	text-align : center;
+	font-size: 12pt;		
+}
+
+table tbody tr td {
+	font-size: 11pt;
+}
+
+/*Section bars should have a bold color to clearly indicate star/end of a section
+.navbar .navbar-inner {
+	background-color: #1F8BD5;
+	background-image : none;
+	font-size: 11pt;
+}
+*/
