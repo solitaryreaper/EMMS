@@ -2,6 +2,8 @@ package controllers;
 
 import java.util.List;
 
+import models.Constants;
+
 import com.walmartlabs.productgenome.rulegenerator.EMMSWorkflowDriver;
 import com.walmartlabs.productgenome.rulegenerator.config.JobMetadata;
 import com.walmartlabs.productgenome.rulegenerator.model.analysis.DatasetEvaluationSummary;
@@ -31,21 +33,31 @@ public class JobController extends Controller {
     	Logger.info("PARAMETERS : " + form.data().toString());
     	
     	JobMetadata jobMeta = new JobMetadata();
-    	jobMeta.setName(form.get("job_name"));
-    	jobMeta.setAttributesToEvaluate(form.get("attributes_to_evaluate"));
-    	jobMeta.setLearner(form.get("learning_algo"));
+    	jobMeta.setDatasetName(form.get(Constants.PARAM_DATASET_NAME));
+    	jobMeta.setDatasetName(form.get(Constants.PARAM_DATASET_NAME));
+    	jobMeta.setAttributesToEvaluate(form.get(Constants.PARAM_ATTRIBUTES_TO_EVALUATE));
+    	jobMeta.setLearner(form.get(Constants.PARAM_LEARNER));
+    	
+    	boolean isItemPairFormat = form.get(Constants.PARAM_DATA_FORMAT).equals(Constants.ITEM_PAIR_FILE_FORMAT);
     	
     	MultipartFormData body = request().body().asMultipartFormData();
-		FilePart srcFilePath = body.getFile("source_data_file_path");
-		FilePart tgtFilePath = body.getFile("target_data_file_path");
-		FilePart goldFilePath = body.getFile("gold_data_file_path");
-		
-    	jobMeta.setSourceFile(srcFilePath.getFile().getAbsolutePath());
-    	jobMeta.setTargetFile(tgtFilePath.getFile().getAbsolutePath());
+    	if(!isItemPairFormat) {
+    		FilePart srcFilePath = body.getFile(Constants.PARAM_SOURCE_FILE_PATH);
+    		FilePart tgtFilePath = body.getFile(Constants.PARAM_TARGET_FILE_PATH);
+
+        	jobMeta.setSourceFile(srcFilePath.getFile().getAbsolutePath());
+        	jobMeta.setTargetFile(tgtFilePath.getFile().getAbsolutePath());
+    	}
+    	else {
+    		FilePart itemPairFilePath = body.getFile(Constants.PARAM_ITEM_PAIR_FILE_PATH);
+    		jobMeta.setItemPairFile(itemPairFilePath.getFile().getAbsolutePath());
+    	}
+    	
+		FilePart goldFilePath = body.getFile(Constants.PARAM_GOLD_FILE_PATH);
     	jobMeta.setGoldFile(goldFilePath.getFile().getAbsolutePath());
 
-    	jobMeta.setDesiredPrecision(form.get("precision"));
-    	jobMeta.setDesiredCoverage(form.get("coverage"));
+    	jobMeta.setDesiredPrecision(form.get(Constants.PARAM_PRECISION));
+    	jobMeta.setDesiredCoverage(form.get(Constants.PARAM_COVERAGE));
     	
     	EMMSWorkflowDriver jobDriver = new EMMSWorkflowDriver();
     	JobEvaluationSummary matchRunResults = jobDriver.runEntityMatching(jobMeta);
