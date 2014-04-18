@@ -153,9 +153,10 @@ topNRules :List[com.walmartlabs.productgenome.rulegenerator.model.analysis.RuleE
 		<!-- Entity Matching Rules Section -->
 		<div class="navbar">
 			<div class="navbar-inner">
-				<div>
-					<ul class="nav">
-						<li><b><h4>Entity Matching Rules</h4></b></li>
+				<div class="row">
+					<ul class="nav nav-pills">
+						<li class="span10"><b><h4>Entity Matching Rules</h4></b></li>
+						<li class="pull-right"><button id="copy_to_clipboard" class="btn btn-primary"> Copy to clipboard</button></li>
 					</ul>
 				</div>
 			</div>
@@ -175,7 +176,7 @@ topNRules :List[com.walmartlabs.productgenome.rulegenerator.model.analysis.RuleE
 				<tbody>
 					@for(ruleSummary <- topNRules) {
 					<tr>
-						<td>@(topNRules.indexOf(ruleSummary) + 1)</td>
+						<td><input type="checkbox" name="rule" id="@ruleSummary.getRule().getName()"> &nbsp; @(topNRules.indexOf(ruleSummary) + 1)</td>
 						<td>@ruleSummary.getRule().toString()</td>
 						<td>@(FormatUtils.formatDoubleToString(ruleSummary.getPrecision()))</td>
 						<td>@(FormatUtils.formatDoubleToString(ruleSummary.getCoverage()))</td>
@@ -190,7 +191,16 @@ topNRules :List[com.walmartlabs.productgenome.rulegenerator.model.analysis.RuleE
 	<script type="text/javascript">
 		$(document).ready(function () {
 			$("#rules_table").tablesorter({sortList : [[0, 0]]});
-		}
+		});
+		
+		$("input[type=checkbox]").click(function() {
+		    var tr = $(this).closest("tr");
+		    if($(this).is(':checked')) {
+		        tr.addClass("success");
+		    } else {
+		        tr.removeClass("success");
+		    }
+		});		
 	</script>
 </body>
 </html>
