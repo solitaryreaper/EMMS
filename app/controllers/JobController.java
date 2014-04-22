@@ -17,14 +17,16 @@ import play.mvc.Controller;
 import play.mvc.Http.MultipartFormData;
 import play.mvc.Http.MultipartFormData.FilePart;
 import play.mvc.Result;
-import views.html.job;
-import views.html.results;
+import views.html.job_setup;
+import views.html.job_matching_results;
 import static play.data.Form.form;
 
 public class JobController extends Controller {
 	
-    public static Result index() {
-        return ok(job.render());
+    public static Result index() 
+    {
+        String projectName = "";
+    	return ok(job_setup.render(projectName));
     }
     
     public static Result submitJob()
@@ -67,6 +69,6 @@ public class JobController extends Controller {
     	
     	List<RuleEvaluationSummary> topNRules = testPhaseSummary.getRankedRuleSummaries(testPhaseSummary.getRuleSummary());
     	
-    	return ok(results.render(trainPhaseSummary, tunePhaseSummary, testPhaseSummary, topNRules));
+    	return ok(job_matching_results.render(trainPhaseSummary, tunePhaseSummary, testPhaseSummary, topNRules));
     }
 }

@@ -1,0 +1,65 @@
+@(projects:List[models.Project])
+<html>
+    @part_head()
+    <body>
+        @part_header()
+        
+        <div class="container-fluid">
+            <!-- Project Dashboard Section -->
+            <div class="navbar">
+                <div class="navbar-inner">
+                    <div class="row">
+                        <ul class="nav nav-pills">
+                            <li class="span10"><b><h4>Project Dashboard</h4></b></li>
+                            <li class="pull-right">
+                                <button id="new_project_btn" class="btn btn-danger"> <i class="fa fa-plus"></i> &nbsp; New Project </button>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+    
+            <div>
+                @if(projects == null || projects.isEmpty()) {
+                    <p class="text-center danger"><b>No projects found !!</b></p>
+                }
+                
+                @if(projects != null && !projects.isEmpty()) {
+                <table id="projects_table" class="table table-bordered table-condensed table-hover">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Description</th>
+                            <th>Jobs</th>
+                            <th>Owner</th>
+                            <th>Creation Time</th>
+                            <th>Last Modification Time</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for(project <- projects) {
+                        <tr>
+                            <td>@project.getName()</td>
+                            <td>@project.getDescription()</td>
+                            <td>@project.getNumJobs()</td>
+                            <td>@project.getOwner()</td>
+                            <td>@project.getCreationTime()</td>
+                            <td>@project.getLastModificationTime()</td>
+                        </tr>
+                        }
+                    </tbody>
+                </table>
+                }
+            </div>
+            
+            
+        </div> 
+        
+        <script>
+	        $('#new_project_btn').click(function() {
+	            window.location.href = '/project';
+	            return false;
+	        });        
+        </script>       
+    </body>
+</html>

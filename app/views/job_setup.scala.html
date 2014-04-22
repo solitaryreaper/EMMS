@@ -1,37 +1,23 @@
+@(project:String)
 <html>
-    <head>
-        <title>Matching Job</title>
-        <link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.2/css/bootstrap.min.css" rel="stylesheet">
-		<link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/main.css")">
-		<link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.0.3/css/font-awesome.min.css" rel="stylesheet">
-		        
-        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js" type="text/javascript"></script>
-        <script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>        
-    </head>
+    @part_head()
     <body>
-        <header class="well">
-            <h1 align="center">
-            	<i class="fa fa-random"></i>&nbsp;<b><a href="@routes.JobController.index()">Entity Matching Management System</a></b>
-            </h1>
-        </header>
+        @part_header()
         
 		<div id="results_loading" style='display: none;'>
 			<img src="http://barracuda.botany.wisc.edu/MaizeWebApp/assets/img/loading.gif">
 		</div>
 	        
 		<div class="navbar container">  
-		    <div class="navbar-inner">  
-		        <div class="container">
-		            <ul class="nav">
-		                 <li class="active"><a href="#"><i class="fa fa-home fa-2x"></i></a></li>
-		                 <li><a href="#"><b>FAQ</b></a></li>
-		            </ul>
-		        </div>  
-		    </div>  
+			<ul class="breadcrumb">
+			  <li><a href="/"><i class="fa fa-home fa-2x"></i></a> <span class="divider">/</span></li>
+			  <li><a href="#">@project</a> <span class="divider">/</span></li>
+			  <li class="active" id="job_id"></li>
+			</ul>		        
 		</div>     	        
 			        
         <div class="container">
-	        <form id="form_container" class="form-horizontal" id="job_form" method="post" action="@routes.JobController.submitJob()" role="form" 
+	        <form class="form-horizontal" id="job_form" method="post" action="@routes.JobController.submitJob()" role="form" 
 	        enctype="multipart/form-data" onsubmit="return show_progress_box()">
 	        
 	           <legend>Job Metadata</legend>
@@ -171,14 +157,12 @@
                </fieldset>
                
                <div class="form-actions">  
-                   <button id="project_submit" type="submit" class="btn btn-primary">Generate Matching Rules</button>  
+                   <button id="job_submit" type="submit" class="btn btn-primary">Generate Matching Rules</button>  
                </div>                 
 	        </form>
         </div>
         
-        
         <script>
-        
         var DEFAULT_ITEM_FILE_COL_DELIMITER = ",";
         var DEFAULT_ITEMPAIR_FILE_COL_DELIMITER = "|#";
         

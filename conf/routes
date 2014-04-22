@@ -3,7 +3,9 @@
 # ~~~~
 
 # Entity Matching Job Page
-GET     /                                   controllers.JobController.index()
+GET     /                                   controllers.ProjectController.index()
+GET     /project                            controllers.ProjectController.createProject()
+POST    /save                               controllers.ProjectController.saveProject()
 GET     /job                                controllers.JobController.index()
 POST    /match                              controllers.JobController.submitJob()
 
